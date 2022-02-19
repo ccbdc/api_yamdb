@@ -48,16 +48,16 @@ class Genre(models.Model):
 
 class Title(models.Models):
     name = models.CharField(blank=True)
-    year = models.DateField(blank=True)
+    year = models.DateField(blank=True)(blank=True)
     description = models.TextField()
-    genre_id = models.ForeignKey(
-        Genre,
-        verbose_name='Жанр',
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name='title'
-    )
+    # genre_id = models.ForeignKey(
+    #     Genre,
+    #     verbose_name='Жанр',
+    #     blank=True,
+    #     null=True,
+    #     on_delete=models.SET_NULL,
+    #     related_name='title'
+    # )
     category = models.ForeignKey(
         Category,
         verbose_name='Категория',
@@ -73,6 +73,13 @@ class Title(models.Models):
     def __str__(self):
         return f'{self.name}'
 
+
+class GenreTitle(models.Model):
+    title_id = models.ForeignKey(Title, on_delete=models.CASCADE)
+    genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.title_id} {self.genre_id}'
 
 class Review(models.Model):
     title_id = models.ForeignKey(
