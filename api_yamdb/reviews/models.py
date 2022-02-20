@@ -15,7 +15,7 @@ class User(AbstractUser):
     first_name = models.TextField(max_length=150, null=True)
     last_name = models.TextField(max_length=150, null=True)
     bio = models.TextField(null=True)
-    role = models.CharField(choices=ROLES, default='user')
+    role = models.CharField(choices=ROLES, default='user', max_length=50)
 
     class Meta:
         verbose_name = 'Пользователь'
@@ -36,7 +36,7 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField(blank=True)
+    name = models.CharField(blank=True, max_length=50)
     slug = models.SlugField(max_length=50, blank=True)
 
     class Meta:
@@ -46,11 +46,11 @@ class Genre(models.Model):
         return f'{self.name}'
 
 
-class Title(models.Models):
-    name = models.CharField(blank=True)
-    year = models.DateField(blank=True)
-    description = models.TextField()
-    genre_id = models.ForeignKey(
+class Title(models.Model):
+    name = models.CharField(blank=False, max_length=50)
+    year = models.DateField(blank=False)
+    description = models.TextField(blank=True)
+    genre = models.ForeignKey(
         Genre,
         verbose_name='Жанр',
         blank=True,
@@ -75,7 +75,7 @@ class Title(models.Models):
 
 
 class Review(models.Model):
-    title_id = models.ForeignKey(
+    title = models.ForeignKey(
         Title,
         verbose_name='Произведение',
         blank=True,
@@ -90,10 +90,10 @@ class Review(models.Model):
         related_name='review'
     )
     text = models.TextField()
-    score = models.PositiveIntegerField(default=5,
+    score = models.PositiveIntegerField(blank=False,
                                         validators=[
                                             MinValueValidator(1),
-                                            MaxValueValidator(100)])
+                                            MaxValueValidator(10)])
     pub_date = models.DateTimeField('Дата публикации',
                                     auto_now_add=True, db_index=True,)
 
@@ -105,14 +105,14 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-    review_id = models.ForeignKey(
+    review = models.ForeignKey(
         Review,
         verbose_name='Ревью',
         blank=True,
         on_delete=models.CASCADE,
         related_name='comment'
     )
-    text = models.TextField(blank=True)
+    text = models.TextField()
     author = models.ForeignKey(
         User,
         verbose_name='Автор комментария',
