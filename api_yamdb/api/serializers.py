@@ -1,7 +1,7 @@
 from api_yamdb.reviews.models import Category
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from reviews.models import Category, Genre
+from reviews.models import Category, Genre, Title
 
 class CategorySerializer(serializers.ModelSerializer):
 
@@ -48,3 +48,9 @@ class  GenreSerializer(serializers.ModelSerializer):
         #         'Такой slug уже существует'
         #     )
         return data
+
+class  TitleSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Title
+        fields = ('id', 'name', 'year', 'rating', 'description', 'genre', 'category')
