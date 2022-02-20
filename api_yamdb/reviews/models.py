@@ -29,7 +29,6 @@ class Category(models.Model):
         max_length=256,
         blank=True,
         verbose_name='Название Категории',
-        help_text='Введите название Категории'
     )
     slug = models.SlugField(max_length=50, blank=True)
 
@@ -41,7 +40,11 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField(blank=True)
+    name = models.CharField(
+        max_length=256,
+        blank=True,
+        verbose_name='Название Жанра',
+    )
     slug = models.SlugField(max_length=50, blank=True)
 
     class Meta:
