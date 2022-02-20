@@ -25,7 +25,12 @@ class User(AbstractUser):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=256, blank=True)
+    name = models.CharField(
+        max_length=256,
+        blank=True,
+        verbose_name='Название Категории',
+        help_text='Введите название Категории'
+    )
     slug = models.SlugField(max_length=50, blank=True)
 
     class Meta:
@@ -46,10 +51,10 @@ class Genre(models.Model):
         return f'{self.name}'
 
 
-class Title(models.Models):
+class Title(models.Model):
     name = models.CharField(blank=True)
-    year = models.DateField(blank=True)(blank=True)
-    description = models.TextField()
+    year = models.DateField(blank=True)
+    description = models.TextField(null=True)
     # genre_id = models.ForeignKey(
     #     Genre,
     #     verbose_name='Жанр',
@@ -97,12 +102,18 @@ class Review(models.Model):
         related_name='review'
     )
     text = models.TextField()
-    score = models.PositiveIntegerField(default=5,
-                                        validators=[
-                                            MinValueValidator(1),
-                                            MaxValueValidator(100)])
-    pub_date = models.DateTimeField('Дата публикации',
-                                    auto_now_add=True, db_index=True,)
+    score = models.PositiveIntegerField(
+        default=5,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(100),
+        ],
+    )
+    pub_date = models.DateTimeField(
+        'Дата публикации',
+        auto_now_add=True,
+        db_index=True,
+    )
 
     class Meta:
         verbose_name = 'Отзыв'
@@ -127,8 +138,11 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='comment'
     )
-    pub_date = models.DateTimeField('Дата публикации',
-                                    auto_now_add=True, db_index=True,)
+    pub_date = models.DateTimeField(
+        'Дата публикации',
+        auto_now_add=True,
+        db_index=True,
+    )
 
     class Meta:
         verbose_name = 'Комментарий'
