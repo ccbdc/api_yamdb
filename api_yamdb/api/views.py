@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from rest_framework import viewsets
 from reviews import models
 from api import serializers
@@ -16,12 +17,20 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         title_id = self.kwargs.get('title_id')
         title = get_object_or_404(models.Title, id=title_id)
+        if models.Review.objects.filter(title=title, author=self.request.user).exists():
+            raise ValidationError('Невозможно создать больше одного отзыва.')
         serializer.save(author=self.request.user, title=title)
+        review = models.Review.objects.filter(title=title, author=self.request.user)
+        title.rating = title.rating + review.score
 
     def perform_destroy(self, review):
+        title_id = self.kwargs.get('title_id')
+        title = get_object_or_404(models.Title, id=title_id)
         user = self.request.user
         author = review.author
         if author == user:
+            review = models.Review.objects.filter(title=title, author=self.request.user)
+            title.rating = title.rating - review.score
             review.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         raise PermissionDenied('Удаление чужого контента запрещено')

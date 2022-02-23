@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import Avg
 
 
 class User(AbstractUser):
@@ -66,6 +67,7 @@ class Title(models.Model):
         on_delete=models.SET_NULL,
         related_name='title'
     )
+    rating = models.IntegerField(blank=True)
 
     class Meta:
         verbose_name = 'Произведение'
@@ -99,6 +101,10 @@ class Review(models.Model):
 
     class Meta:
         verbose_name = 'Отзыв'
+        constraints = [
+            models.UniqueConstraint(field=['title', 'author'],
+                                    name='unique review')
+        ]
 
     def __str__(self):
         return f'{self.text}'
