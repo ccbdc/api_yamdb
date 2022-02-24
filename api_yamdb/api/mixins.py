@@ -12,7 +12,6 @@ class CategoryGenreMixinViewSet(
         CreateModelMixin,
         DestroyModelMixin,
         GenericViewSet):
-    """Миксин для классов жанра и категории."""
     queryset = None
     serializer_class = None
     pagination_class = PageNumberPagination
