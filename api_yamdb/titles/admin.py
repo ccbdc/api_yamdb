@@ -1,7 +1,6 @@
 from django.contrib.admin import ModelAdmin, register
 
 from api_yamdb.settings import EMPTY_STRING_FOR_ADMIN_PY
-from .models import MyUser
 from .models import Category, Genre, Title
 
 ModelAdmin.empty_value_display = EMPTY_STRING_FOR_ADMIN_PY
@@ -32,11 +31,3 @@ class GenreAdmin(ModelAdmin):
     search_fields = ('name',)
     list_filter = ('slug',)
     prepopulated_fields = {'slug': ('name',)}
-
-@register(MyUser)
-class MyUserAdmin(ModelAdmin):
-    list_display = (
-        'id', 'username', 'email', 'role', 'bio',
-        'first_name', 'last_name', 'confirmation_code')
-    list_editable = ('role',)
-    search_fields = ('username', 'email')

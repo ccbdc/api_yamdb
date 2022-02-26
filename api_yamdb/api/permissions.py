@@ -1,4 +1,3 @@
-from rest_framework import permissions
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly, BasePermission)
 
@@ -21,11 +20,3 @@ class AdminOrReadOnly(BasePermission):
             or request.user.is_authenticated
             and request.user.is_admin
         )
-
-class IsAdmin(permissions.BasePermission):
-    """
-    The admin permissions.
-    """
-    def has_permission(self, request, view):
-        if request.user.is_authenticated and request.user.is_admin:
-            return True

@@ -6,60 +6,9 @@ from rest_framework.serializers import (
     SerializerMethodField,
     ModelSerializer,
     ValidationError)
-from django.core.exceptions import ValidationError
-from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
-from .models import MyUser
-from .models import Category, Genre, Title
-
+from titles.models import Category, Genre, Title
 from reviews.models import Comment, Review
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = (
-            'username',
-            'role',
-            'email',
-            'first_name',
-            'last_name',
-            'bio',
-        )
-        model = MyUser
-
-
-class SignupSerializer(serializers.Serializer):
-    username = serializers.CharField(
-        validators=(UniqueValidator(queryset=MyUser.objects.all()),)
-    )
-    email = serializers.EmailField(
-        validators=(UniqueValidator(queryset=MyUser.objects.all()),)
-    )
-
-    class Meta:
-        model = MyUser
-        fields = (
-            'username',
-            'email',
-        )
-
-    def validate_username(self, data):
-        if data == 'me':
-            raise ValidationError(message='Username не может быть me!')
-        return data
-
-
-class GenTokenSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    confirmation_code = serializers.CharField(max_length=100)
-
-    class Meta:
-        model = MyUser
-        fields = (
-            'username',
-            'confirmation_code',
-        )
 
 
 class CategorySerializer(ModelSerializer):
@@ -88,7 +37,7 @@ class TitleSerializer(ModelSerializer):
     def validate_year(self, year):
         if year > datetime.now().year:
             raise ValidationError(
-                'Нельзя добавить это произведение.')
+                'Нельзя добавлять произведения из будущего.')
         return year
 
     def get_rating(self, obj):
@@ -112,7 +61,7 @@ class ReviewSerializer(ModelSerializer):
         if Review.objects.values(
             'author', 'title').filter(
                 author=author, title__id=title_id).exists():
-            raise ValidationError('Отзыв уже был написан.')
+            raise ValidationError('Вы уже написали отзыв.')
         return data
 
 

@@ -1,12 +1,15 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from api.models import MyUser as User
+
+from titles.models import Title
+from users.models import MyUser as User
 
 
 class Review(models.Model):
     MARKS = [(i, str(i)) for i in range(1, 11)]
 
     title = models.ForeignKey(
+        to=Title,
         on_delete=models.CASCADE,
         related_name='reviews',
         verbose_name='Название произведения'

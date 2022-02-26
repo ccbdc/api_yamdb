@@ -7,8 +7,7 @@ os.path.expanduser('~')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ.get('SECRET_KEY', default=None)
-#ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default=None).split(',')
+SECRET_KEY = '*'
 
 DEBUG = True
 
@@ -20,7 +19,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'django_filters',
     'api.apps.ApiConfig',
     'reviews.apps.ReviewsConfig',
     'titles.apps.TitlesConfig',

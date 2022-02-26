@@ -1,6 +1,6 @@
 from django_filters.rest_framework import BaseInFilter, CharFilter, FilterSet
 
-from .models import Title
+from titles.models import Title
 
 
 class CharFilterInFilter(BaseInFilter, CharFilter):
