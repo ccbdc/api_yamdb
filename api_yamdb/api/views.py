@@ -1,14 +1,13 @@
 from django_filters.rest_framework import DjangoFilterBackend
-
 from django.shortcuts import get_object_or_404
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
 
-from api.filters import TitleFilter
-from api.mixins import CategoryGenreMixinViewSet
-from api.permissions import AdminOrReadOnly, AuthorStaffOrReadOnly
-from api.serializers import (
+from .filters import TitleFilter
+from .mixins import CategoryGenreMixinViewSet
+from .permissions import AdminOrReadOnly, AuthorStaffOrReadOnly
+from .serializers import (
     CategorySerializer, CommentSerializer, GenreSerializer,
     ReviewSerializer, TitleSerializer)
 from titles.models import Category, Genre, Title

@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -20,7 +19,6 @@ codegen = PasswordResetTokenGenerator()
 class UserViewSet(viewsets.ModelViewSet):
     queryset = MyUser.objects.all()
     permission_classes = (IsAuthenticated, IsAdmin,)
-    filter_backends = (DjangoFilterBackend,)
     serializer_class = UserSerializer
     search_fields = ('username',)
     lookup_field = 'username'
