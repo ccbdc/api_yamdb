@@ -37,7 +37,7 @@ class TitleSerializer(ModelSerializer):
     def validate_year(self, year):
         if year > datetime.now().year:
             raise ValidationError(
-                'Нельзя добавлять произведения из будущего.')
+                'Некорректная дата произведения.')
         return year
 
     def get_rating(self, obj):

@@ -10,7 +10,7 @@ def this_year():
 def max_value_this_year(value):
     return MaxValueValidator(
         this_year(),
-        'Нельзя добавлять произведения из будущего.'
+        'Некорректная дата произведения'
     )(value)
 
 

@@ -6,7 +6,6 @@ from .models import MyUser
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Сериализация юзера."""
     class Meta:
         fields = (
             'username',
@@ -20,7 +19,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SignupSerializer(serializers.Serializer):
-    """Сериализация входа."""
     username = serializers.CharField(
         validators=(UniqueValidator(queryset=MyUser.objects.all()),)
     )
@@ -37,12 +35,11 @@ class SignupSerializer(serializers.Serializer):
 
     def validate_username(self, data):
         if data == 'me':
-            raise ValidationError(message='Username не может быть me!')
+            raise ValidationError(message='Некорректный username!')
         return data
 
 
 class GenTokenSerializer(serializers.Serializer):
-    """Сериализация генерации токена."""
     username = serializers.CharField()
     confirmation_code = serializers.CharField(max_length=100)
 

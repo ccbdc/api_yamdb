@@ -48,7 +48,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class SignupView(APIView):
-    """Регистрация нового пользователя."""
     permission_classes = (AllowAny,)
 
     def post(self, request):
@@ -61,7 +60,7 @@ class SignupView(APIView):
             username=username
         )
         confirmation_code = codegen.make_token(user)
-        mail_subject = 'Ваш код подтверждения'
+        mail_subject = 'Код подтверждения'
         message = f'Код подтверждения - {confirmation_code}'
 
         if is_created:
@@ -82,7 +81,6 @@ class SignupView(APIView):
 
 
 class TokenView(APIView):
-    """Получение JWT-токена."""
     permission_classes = (AllowAny, )
 
     def post(self, request):
@@ -99,6 +97,6 @@ class TokenView(APIView):
             return Response({'token': f'{token}'}, status=status.HTTP_200_OK)
 
         return Response(
-            {'confirmation_code': ['Код не действителен!']},
+            {'confirmation_code': ['Код не действителен']},
             status=status.HTTP_400_BAD_REQUEST
         )
