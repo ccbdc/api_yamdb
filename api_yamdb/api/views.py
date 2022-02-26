@@ -4,10 +4,10 @@ from django.core.mail import send_mail
 from django.core.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend
 from django.forms import ValidationError
-from rest_framework import status, viewsets, permissions
+from rest_framework import status, viewsets
 
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdmin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import AccessToken
@@ -21,8 +21,9 @@ from api.mixins import CategoryGenreMixinViewSet
 from api.permissions import AdminOrReadOnly, AuthorStaffOrReadOnly
 from api.serializers import (
     CategorySerializer, CommentSerializer, GenreSerializer,
-    ReviewSerializer, TitleSerializer)
-from .models import Category, Genre, Title
+    ReviewSerializer, TitleSerializer, UserSerializer, SignupSerializer,
+    GenTokenSerializer)
+from .models import Category, Genre, Title, MyUser
 from reviews.models import Review
 
 
@@ -184,11 +185,11 @@ class ReviewViewSet(ModelViewSet):
 
     def perform_destroy(self, review):
         title_id = self.kwargs.get('title_id')
-        title = get_object_or_404(models.Title, id=title_id)
+        title = get_object_or_404(Title, id=title_id)
         user = self.request.user
         author = review.author
         if author == user:
-            review = models.Review.objects.filter(title=title, author=self.request.user)
+            review = Review.objects.filter(title=title, author=self.request.user)
             title.rating = title.rating - review.score
             review.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
