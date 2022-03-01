@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 from django.db.models import Avg
 from rest_framework.relations import SlugRelatedField
 from rest_framework.serializers import (
@@ -35,7 +35,7 @@ class TitleSerializer(ModelSerializer):
         model = Title
 
     def validate_year(self, year):
-        if year > datetime.now().year:
+        if year > timezone.now().year:
             raise ValidationError(
                 'Некорректная дата произведения.')
         return year
